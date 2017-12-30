@@ -27,11 +27,28 @@
             background-repeat: no-repeat;
             background-size: cover;
         }
+        .cherry {
+            background-color: black;
+            background: url('cherry.png');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
         .empty {
             background-color: black;
         }
         #pacman {
             background: url('pacman.gif');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            transform: rotate(0deg);
+        }
+        #pacwoman {
+            background: url('pacwoman.gif');
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
@@ -67,26 +84,27 @@
     <div id="container">
         <div id="world"></div>
         <div id="pacman"></div>
+        <div id="pacwoman"></div>
         <div id="ghost"></div>
-        <div id="pacman_score">Your Score: 0, Ghost Score: 0</div>
+        <div id="pacman_score">PacMan: 0, PacWoman: 0, Ghost: 0</div>
     </div>
     <script>
         var world = [
             [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
             [2,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
             [2,1,1,2,2,2,1,1,2,2,2,1,1,2,2,2,1,1,1,2,2,2,1,1,2,1,1,1,2,1,1,2,2,2,1,1,1,2],
-            [2,1,1,2,1,1,1,1,2,0,2,1,1,2,0,0,2,1,1,1,2,1,1,1,2,2,1,1,2,1,1,2,1,1,2,1,1,2],
+            [2,1,1,2,1,1,1,1,2,0,2,1,1,2,0,0,2,1,1,1,2,1,1,1,2,2,3,1,2,1,1,2,3,1,2,1,1,2],
             [2,1,1,2,1,1,1,1,2,0,2,1,1,2,0,0,2,1,1,1,2,1,1,1,2,1,2,1,2,1,1,2,1,1,1,1,1,2],
             [2,1,1,2,1,1,1,1,2,0,2,1,1,2,0,0,2,1,1,1,2,1,1,1,2,1,1,2,2,1,1,2,1,2,2,1,1,2],
             [2,1,1,2,2,2,1,1,2,2,2,1,1,2,2,2,1,1,1,2,2,2,1,1,2,1,1,1,2,1,1,2,2,2,1,1,1,2],
-            [2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
+            [2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,2],
             [2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
             [2,1,1,2,2,1,1,1,2,2,2,1,1,2,2,2,2,1,1,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
             [2,1,1,2,0,2,1,1,2,0,2,1,1,1,1,2,1,1,1,2,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
             [2,1,1,2,0,2,1,1,2,0,2,1,1,1,1,2,1,1,1,2,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
-            [2,1,1,2,0,2,1,1,2,0,2,1,1,2,1,2,1,1,1,2,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
-            [2,1,1,2,2,1,1,1,2,2,2,1,1,1,2,1,1,1,1,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
-            [2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,2],
+            [2,1,1,2,0,2,1,1,2,0,2,1,1,2,3,2,1,1,1,2,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
+            [2,1,1,2,2,1,1,1,2,2,2,1,1,1,2,3,1,1,1,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
+            [2,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
             [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
         ];
 
@@ -96,20 +114,28 @@
             d: 0
         }
 
-        var ghost = {
-            x: 36, 
+        var pacwoman = {
+            x: 1,
             y: 14,
             d: 0
         }
 
-        var pacman_score = 0, ghost_score = 0;
+        var ghost = {
+            x: 36, 
+            y: 7,
+            d: 0
+        }
+
+        var pacman_score = 0, pacwoman_score = 0, ghost_score = 0;
 
         function displayWorld() {
             var output = "";
             for (i=0; i<world.length; i++) {
                 output += "<div class='row'>";
                 for (j=0; j<world[i].length; j++) {
-                    if (world[i][j] == 2) {
+                    if (world[i][j] == 3) {
+                        output +="<div class='cherry'></div>";
+                    } else if (world[i][j] == 2) {
                         output +="<div class='brick'></div>";
                     } else if (world[i][j] == 1) {
                         output +="<div class='coin'></div>";
@@ -129,6 +155,13 @@
             document.getElementById('pacman').style.transform = pacman.d
         }
         displayPacman();
+
+        function displayPacWoman() {
+            document.getElementById('pacwoman').style.top = pacwoman.y*20+"px"
+            document.getElementById('pacwoman').style.left = pacwoman.x*20+"px"
+            document.getElementById('pacwoman').style.transform = pacwoman.d
+        }
+        displayPacWoman();
 
         function ghostMove () {
             return Math.floor(Math.random()*5);
@@ -157,11 +190,11 @@
         displayGhost();
 
         function displayScore() {
-            document.getElementById('pacman_score').innerHTML = `Your Score: ${pacman_score}, Ghost Score: ${ghost_score}`;
+            document.getElementById('pacman_score').innerHTML = `PacMan: ${pacman_score},  PacWoman: ${pacwoman_score},  Ghost: ${ghost_score}`;
         }
 
         document.onkeydown = function(e) {
-            // console.log(e.keyCode);
+            console.log(e.keyCode);
             if (e.keyCode == 37 && world[pacman.y][pacman.x-1] != 2) {
                 pacman.x --;
                 pacman.d = 'rotate(180deg)'; //up
@@ -183,6 +216,43 @@
                 displayScore();
             }
 
+            if (world[pacman.y][pacman.x] == 3) {
+                world[pacman.y][pacman.x] = 0;
+                pacman_score += 50;
+                displayWorld();
+                displayScore();
+            }
+
+            if (e.keyCode == 90 && world[pacwoman.y][pacwoman.x-1] != 2) {
+                pacwoman.x --;
+                pacwoman.d = 'rotate(0deg)'; //up
+            } else if (e.keyCode == 67 && world[pacwoman.y][pacwoman.x+1] != 2) {
+                pacwoman.x ++;
+                pacwoman.d = 'rotate(180deg)'; //right
+            } else if (e.keyCode == 83 && world[pacwoman.y-1][pacwoman.x] != 2) {
+                pacwoman.y --;
+                pacwoman.d = 'rotate(90deg)'; //left
+            } else if (e.keyCode == 88 && world[pacwoman.y+1][pacwoman.x] != 2) {
+                pacwoman.y ++;
+                pacwoman.d = 'rotate(270deg)'; //down
+            }
+
+            if (world[pacwoman.y][pacwoman.x] == 1) {
+                world[pacwoman.y][pacwoman.x] = 0;
+                pacwoman_score += 10;
+                displayWorld();
+                displayScore();
+            }
+
+            if (world[pacwoman.y][pacwoman.x] == 3) {
+                world[pacwoman.y][pacwoman.x] = 0;
+                pacwoman_score += 50;
+                displayWorld();
+                displayScore();
+            }
+
+            displayGhost();
+            
             if (world[ghost.y][ghost.x] == 1) {
                 world[ghost.y][ghost.x] = 0;
                 ghost_score += 10;
@@ -190,7 +260,15 @@
                 displayScore();
             }
 
+            if (world[ghost.y][ghost.x] == 3) {
+                world[ghost.y][ghost.x] = 0;
+                ghost_score += 50;
+                displayWorld();
+                displayScore();
+            }
+
             displayPacman();
+            displayPacWoman();
             displayGhost();
         }
 
